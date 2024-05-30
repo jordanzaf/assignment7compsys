@@ -17,20 +17,15 @@ CompilerParser::CompilerParser(std::list<Token*> tokens) {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileProgram() {
-    if (tokens.size() <4){
-        throw ParseException();
-    }
+    int parent = currToken;
     mustBe("keyword", "class");
-    tokens[0]->addChild(tokens[1]);
-    std::cout <<(tokens[0])<<std::endl;
+    addChild(parent, currToken);
     mustBe("identifier", "Main");
-    tokens[0]->addChild(tokens[2]);
-    std::cout <<(tokens[0])<<std::endl;
+    addChild(parent, currToken);
     mustBe("symbol", "{");
-    tokens[0]->addChild(tokens[3]);
-    std::cout <<(tokens[0])<<std::endl;
+    addChild(parent, currToken);
     mustBe("symbol", "}");
-    return tokens[0];
+    return tokens[parent];
 }
 
 /**
@@ -38,12 +33,33 @@ ParseTree* CompilerParser::compileProgram() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClass() {
-
-    return NULL;
+    int parent = currToken;
+    mustBe("keyword", "class");
+    addChild(parent, currToken);
+    mustBe("identifier", tokens[1]->getValue());
+    addChild(parent, currToken);
+    mustBe("symbol", "{");
+    addChild(parent, currToken);
+    mustBe("symbol", "}");
+    return tokens[parent];
 }
 
 ParseTree* CompilerParser::compileClassVarDec() {
-    return NULL;
+    int parent = currToken;
+    if (currTokVal()!="field" && currTokVal()!="static"){
+        throw ParseException();
+    } 
+    mustBe("keyword", tokens[currToken]->getValue());
+    if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
+        throw ParseException();
+    } 
+    mustBe("keyword", tokens[1]->getValue());
+    mustBe("identifier", tokens[currToken]->getValue());
+    while (currTokVal() != ";"){
+        mustBe(tokens[currToken]->getType(), currTokVal());
+    }
+    mustBe("symbol", ";");
+    return tokens[parent];
 }
 
 /**
@@ -163,6 +179,9 @@ void CompilerParser::next(){
  * @return the Token
  */
 Token* CompilerParser::current(){
+    if (currToken > tokens.size()-1){
+        throw ParseException();
+    }
     return tokens[currToken];
 }
 
@@ -187,7 +206,7 @@ Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValu
         next();
         return current();
     }
-    throw ParseError();
+    throw ParseException();
     return NULL;
 }
 
@@ -197,4 +216,12 @@ Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValu
  */
 const char* ParseException::what() {
     return "An Exception occurred while parsing!";
+}
+
+void CompilerParser::addChild(int a, int b){
+    tokens[a]->ParseTree::addChild(tokens[b]);
+}
+
+std::string CompilerParser::currTokVal(){
+    return (tokens[currToken]->getValue());
 }

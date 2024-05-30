@@ -33,6 +33,9 @@ class CompilerParser {
         ParseTree* compileExpression();
         ParseTree* compileTerm();
         ParseTree* compileExpressionList();
+
+        void addChild(int a, int b);
+        std::string currTokVal();
         
         void next();
         Token* current();
