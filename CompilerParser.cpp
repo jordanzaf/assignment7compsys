@@ -198,7 +198,7 @@ ParseTree* CompilerParser::compileVarDec() {
  */
 ParseTree* CompilerParser::compileStatements() {
     ParseTree* parent = new ParseTree("statements", "null");
-    while (currTokVal() != "}"){
+    while (currToken < tokens.size()){
         addChild(parent);
         if (currTokVal() == "let"){
             addChild(parent, compileLet());
@@ -207,7 +207,7 @@ ParseTree* CompilerParser::compileStatements() {
         } if (currTokVal() == "return"){
             addChild(parent, compileReturn());
         } else {
-            throw ParseException();
+            break;
         }
     }
 
