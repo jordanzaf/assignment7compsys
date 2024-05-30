@@ -201,9 +201,9 @@ ParseTree* CompilerParser::compileStatements() {
     addChild(parent);
     if (currTokVal() == "let"){
         addChild(parent, compileLet());
-    } else if (currTokVal() == "do"){
+    } if (currTokVal() == "do"){
         addChild(parent, compileDo());
-    } else if (currTokVal() == "return"){
+    } if (currTokVal() == "return"){
         addChild(parent, compileReturn());
     } else {
         throw ParseException();
@@ -225,7 +225,14 @@ ParseTree* CompilerParser::compileLet() {
     addChild(parent);
     mustBe("symbol", "=");
     addChild(parent);
-    mustBe("keyword", "skip");
+    if (currTokVal() == "skip" ){
+        mustBe("keyword", "skip");
+    }else {
+        mustBe("integerConstant", currTokVal());
+    }
+
+    addChild(parent);
+    mustBe("symbol", ";");
 
     return parent;
 }
@@ -235,7 +242,31 @@ ParseTree* CompilerParser::compileLet() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileIf() {
-    return NULL;
+    ParseTree* parent = new ParseTree("ifStatement", "null");
+    addChild(parent);
+    mustBe("keyword", "if");
+    addChild(parent);
+    mustBe("symbol", "(");
+    addChild(parent);
+    mustBe("keyword", "skip");
+    addChild(parent);
+    mustBe("symbol", ")");
+    addChild(parent);
+    mustBe("symbol", "{");
+    if (currTokVal() != "}"){
+        addChild(parent, compileStatements());
+    }
+    addChild(parent);
+    mustBe("symbol", "}");
+    if (currTokVal() == "else"){
+        mustBe("keyword", "else");
+        mustBe("symbol", "{");
+        if (currTokVal() != "}"){
+            addChild(parent, compileStatements());
+        }
+        mustBe("symbol", "}");
+    } 
+    return parent;
 }
 
 /**
@@ -243,7 +274,8 @@ ParseTree* CompilerParser::compileIf() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileWhile() {
-    return NULL;
+    ParseTree* parent = new ParseTree("whileStatement", "null");
+    return parent;
 }
 
 /**
@@ -251,7 +283,8 @@ ParseTree* CompilerParser::compileWhile() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileDo() {
-    return NULL;
+    ParseTree* parent = new ParseTree("doStatement", "null");
+    return parent;
 }
 
 /**
@@ -259,7 +292,8 @@ ParseTree* CompilerParser::compileDo() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileReturn() {
-    return NULL;
+    ParseTree* parent = new ParseTree("returnStatement", "null");
+    return parent;
 }
 
 /**
