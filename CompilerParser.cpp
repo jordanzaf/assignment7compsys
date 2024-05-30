@@ -150,20 +150,11 @@ ParseTree* CompilerParser::compileSubroutineBody() {
     ParseTree* parent = new ParseTree("subroutineBody", "null");
     addChild(parent);
     mustBe("symbol", "{");
-    std::cout << "11" << std::endl;
-    while (currTokVal() == "var"){ 
-        std::cout << "12" << std::endl;
+    while (currTokVal() != "}"){ 
         addChild(parent, compileVarDec());
-        //addChild(parent, compileStatements());
     } 
-    std::cout << "2.1" << std::endl;
     addChild(parent);
-    std::cout << currTokTyp() + " " + currTokVal() << std::endl;
-    //mustBe("symbol", ";");
-    //addChild(parent);
-    std::cout << currTokTyp() + " " + currTokVal() << std::endl;
     mustBe("symbol", "}");
-    std::cout << "2.11" << std::endl;
     return parent;
 }
 
