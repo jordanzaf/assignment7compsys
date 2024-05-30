@@ -150,12 +150,18 @@ ParseTree* CompilerParser::compileSubroutineBody() {
     ParseTree* parent = new ParseTree("subroutineBody", "null");
     addChild(parent);
     mustBe("symbol", "{");
-    while (currTokVal() != "}"){ 
-        addChild(parent, compileVarDec());
-    } 
+    
+    while (currTokVal() != "}") {
+        if (currTokVal() == "var") {
+            addChild(parent, compileVarDec());
+        } else {
+            addChild(parent, compileStatements());
+        }
+    }
+    
     addChild(parent);
     mustBe("symbol", "}");
-    return parent;
+     return parent;
 }
 
 /**
@@ -166,11 +172,12 @@ ParseTree* CompilerParser::compileVarDec() {
     ParseTree* parent = new ParseTree("varDec", "null");
     addChild(parent);
     mustBe("keyword", "var");
-    if (currTokVal() != "char" && currTokVal() != "int" && currTokVal() != "boolean"){
-        throw ParseException();
-    }
     addChild(parent);
-    mustBe("keyword", currTokVal());
+    if (currTokVal() != "char" && currTokVal() != "int" && currTokVal() != "boolean"){
+        mustBe("identifier", currTokVal());
+    } else{
+            mustBe("keyword", currTokVal());
+    }
 
     while (currTokVal() != ";"){
         addChild(parent);
