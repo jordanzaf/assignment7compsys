@@ -62,6 +62,7 @@ ParseTree* CompilerParser::compileClassVarDec() {
     addChild(parent, currToken);
     mustBe("identifier", tokens[currToken]->getValue());
     addChild(parent, currToken);
+    //do this later
     while (currTokVal() != ";"){
         mustBe(tokens[currToken]->getType(), currTokVal());
         addChild(parent, currToken);
@@ -75,7 +76,9 @@ ParseTree* CompilerParser::compileClassVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutine() {
-    return NULL;
+    int parent = currToken;
+
+    return tokens[parent];
 }
 
 /**
@@ -178,6 +181,9 @@ ParseTree* CompilerParser::compileExpressionList() {
  * Advance to the next token
  */
 void CompilerParser::next(){
+    if (currToken >= tokens.size()-1){
+        throw ParseException();
+    }
     currToken++;
     return;
 }
@@ -187,9 +193,6 @@ void CompilerParser::next(){
  * @return the Token
  */
 Token* CompilerParser::current(){
-    if (currToken > tokens.size()-1){
-        throw ParseException();
-    }
     return tokens[currToken];
 }
 
@@ -211,9 +214,7 @@ bool CompilerParser::have(std::string expectedType, std::string expectedValue){
  */
 Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValue){
     if (expectedType == tokens[currToken]->getType() && expectedValue == tokens[currToken]->getValue()){
-        if (currToken != tokens.size()-1){
-            next();
-        }
+        next();
         return current();
     }
     throw ParseException();
