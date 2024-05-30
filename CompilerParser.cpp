@@ -260,9 +260,7 @@ ParseTree* CompilerParser::compileIf() {
     mustBe("symbol", ")");
     addChild(parent);
     mustBe("symbol", "{");
-    if (currTokVal() != "}"){
-        addChild(parent, compileStatements());
-    }
+    addChild(parent, compileStatements());
     addChild(parent);
     mustBe("symbol", "}");
     if (currToken < tokens.size() -1 && currTokVal() == "else"){
@@ -292,9 +290,7 @@ ParseTree* CompilerParser::compileWhile() {
     mustBe("symbol", ")");
     addChild(parent);
     mustBe("symbol", "{");
-    if (currTokVal() != "}"){
-        addChild(parent, compileStatements());
-    }
+    addChild(parent, compileStatements());
     addChild(parent);
     mustBe("symbol", "}");
     return parent;
@@ -335,8 +331,18 @@ ParseTree* CompilerParser::compileReturn() {
  */
 ParseTree* CompilerParser::compileExpression() {
     ParseTree* parent = new ParseTree("expression", "null");
-    addChild(parent);
-    mustBe("keyword", "skip");
+    while (currToken < tokens.size()){
+        if(currTokVal() == "skip"){
+            addChild(parent);
+            mustBe("keyword", "skip");
+        }else if (currTokVal() == "" ||){ //wont work cos could be bracket
+
+        } else {
+            break;
+        }
+
+    }
+
     return parent;
 }
 
@@ -345,7 +351,12 @@ ParseTree* CompilerParser::compileExpression() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileTerm() {
-    return NULL;
+    ParseTree* parent = new ParseTree("term", "null");
+    while (currToken < tokens.size()){
+        mustBe("symbol", "(");
+        mustBe("identifier", currTokVal());
+    }
+    return parent;
 }
 
 /**
@@ -353,7 +364,8 @@ ParseTree* CompilerParser::compileTerm() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileExpressionList() {
-    return NULL;
+    ParseTree* parent = new ParseTree("expressionList", "null");
+    return parent;
 }
 
 /**
