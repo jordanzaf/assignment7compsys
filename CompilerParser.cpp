@@ -151,7 +151,7 @@ ParseTree* CompilerParser::compileSubroutineBody() {
     addChild(parent);
     mustBe("symbol", "{");
     
-    while (currTokVal() != "}" && currTokVal() == "var") {
+    while (currToken < tokens.size() && currTokVal() == "var") {
         addChild(parent, compileVarDec());
     }
     addChild(parent, compileStatements());
@@ -195,7 +195,6 @@ ParseTree* CompilerParser::compileVarDec() {
  */
 ParseTree* CompilerParser::compileStatements() {
     ParseTree* parent = new ParseTree("statements", "null");
-    addChild(parent);
     while (currToken < tokens.size()){
         if (currTokVal() == "let"){
             addChild(parent, compileLet());
@@ -255,7 +254,9 @@ ParseTree* CompilerParser::compileIf() {
     addChild(parent);
     mustBe("symbol", "}");
     if (currToken < tokens.size() -1 && currTokVal() == "else"){
+        addChild(parent);
         mustBe("keyword", "else");
+        addChild(parent);
         mustBe("symbol", "{");
         addChild(parent, compileStatements());
         mustBe("symbol", "}");
