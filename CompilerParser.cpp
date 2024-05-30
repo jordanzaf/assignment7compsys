@@ -147,6 +147,7 @@ ParseTree* CompilerParser::compileParameterList() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutineBody() {
+    /*
     ParseTree* parent = new ParseTree("subroutineBody", "null");
     addChild(parent);
     mustBe("symbol", "{");
@@ -159,6 +160,8 @@ ParseTree* CompilerParser::compileSubroutineBody() {
     addChild(parent);
     mustBe("symbol", "}");
      return parent;
+     */
+    return NULL;
 }
 
 /**
@@ -194,7 +197,7 @@ ParseTree* CompilerParser::compileVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileStatements() {
-    ParseTree* parent = new ParseTree("statements", "null");
+    /*ParseTree* parent = new ParseTree("statements", "null");
     while (currToken < tokens.size()){
         if (currTokVal() == "let"){
             addChild(parent, compileLet());
@@ -212,6 +215,8 @@ ParseTree* CompilerParser::compileStatements() {
     }
 
     return parent;
+    */
+   return NULL;
 }
 
 /**
