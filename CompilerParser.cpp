@@ -195,7 +195,7 @@ ParseTree* CompilerParser::compileVarDec() {
  */
 ParseTree* CompilerParser::compileStatements() {
     ParseTree* parent = new ParseTree("statements", "null");
-    //addChild(parent);
+    addChild(parent);
     while (currToken < tokens.size()){
         if (currTokVal() == "let"){
             addChild(parent, compileLet());
@@ -259,7 +259,7 @@ ParseTree* CompilerParser::compileIf() {
     addChild(parent, compileStatements());
     addChild(parent);
     mustBe("symbol", "}");
-    if (currTokVal() == "else"){
+    if (currToken < tokens.size() -1 && currTokVal() == "else"){
         mustBe("keyword", "else");
         mustBe("symbol", "{");
         addChild(parent, compileStatements());
