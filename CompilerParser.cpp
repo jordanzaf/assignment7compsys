@@ -153,7 +153,7 @@ ParseTree* CompilerParser::compileSubroutineBody() {
     addChild(parent);
     mustBe("symbol", "{");
     std::cout << "11" << std::endl;
-    if (currTokVal() == "var"){ 
+    while (currTokVal() == "var"){ 
         std::cout << "12" << std::endl;
         addChild(parent, compileVarDec());
         //addChild(parent, compileStatements());
@@ -174,31 +174,25 @@ ParseTree* CompilerParser::compileSubroutineBody() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileVarDec() {
-    std::cout << "13" << std::endl;
     ParseTree* parent = new ParseTree("varDec", "null");
     addChild(parent);
+    mustBe("keyword", "var");
+    if (currTokVal() != "char" && currTokVal() != "int" && currTokVal() != "boolean"){
+        throw ParseException();
+    }
+    addChild(parent);
+    mustBe("keyword", currTokVal());
+
     while (currTokVal() != ";"){
-        std::cout << "x" << std::endl;
-        addChild(parent);
-        std::cout << currTokVal() << std::endl;
-        mustBe("keyword", "var");
-        std::cout << "16" << std::endl;
-        if (currTokVal() != "char" && currTokVal() != "int" && currTokVal() != "boolean"){
-            std::cout << "17" << std::endl;
-            throw ParseException();
-        }
-        std::cout << "14" << std::endl;
-        addChild(parent);
-        mustBe("keyword", currTokVal());
         addChild(parent);
         mustBe("identifier", currTokVal());
-        std::cout << "15" << std::endl;
         if (currTokVal()!=";" ){
             addChild(parent);
             mustBe("symbol", ",");
         }
     }
-    std::cout << "y" << std::endl;
+    addChild(parent);
+    mustBe("symbol", ";");
     return parent;
 }
 
