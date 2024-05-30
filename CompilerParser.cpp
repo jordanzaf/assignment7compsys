@@ -1,4 +1,5 @@
 #include "CompilerParser.h"
+#include <iostream>
 
 
 /**
@@ -6,6 +7,9 @@
  * @param tokens A linked list of tokens to be parsed
  */
 CompilerParser::CompilerParser(std::list<Token*> tokens) {
+    for (std::list<Token*>::iterator it = tokens.begin(); it!= tokens.end(); it++){
+        this->tokens.push_back(*it);
+    }
 }
 
 /**
@@ -13,7 +17,17 @@ CompilerParser::CompilerParser(std::list<Token*> tokens) {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileProgram() {
-    return NULL;
+    mustBe("keyword", "class");
+    tokens[0]->addChild(tokens[1]);
+    std::cout <<(tokens[0])<<std::endl;
+    mustBe("identifier", "Main");
+    tokens[0]->addChild(tokens[2]);
+    std::cout <<(tokens[0])<<std::endl;
+    mustBe("symbol", "{");
+    tokens[0]->addChild(tokens[3]);
+    std::cout <<(tokens[0])<<std::endl;
+    mustBe("symbol", "}");
+    return tokens[0];
 }
 
 /**
@@ -21,13 +35,12 @@ ParseTree* CompilerParser::compileProgram() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClass() {
+    //ParseTree* output;
+    //mustBe("keyword", "class");
+   // mustBe("identifier", "");
     return NULL;
 }
 
-/**
- * Generates a parse tree for a static variable declaration or field declaration
- * @return a ParseTree
- */
 ParseTree* CompilerParser::compileClassVarDec() {
     return NULL;
 }
@@ -140,6 +153,7 @@ ParseTree* CompilerParser::compileExpressionList() {
  * Advance to the next token
  */
 void CompilerParser::next(){
+    currToken++;
     return;
 }
 
@@ -148,7 +162,7 @@ void CompilerParser::next(){
  * @return the Token
  */
 Token* CompilerParser::current(){
-    return NULL;
+    return tokens[currToken];
 }
 
 /**
@@ -156,6 +170,9 @@ Token* CompilerParser::current(){
  * @return true if a match, false otherwise
  */
 bool CompilerParser::have(std::string expectedType, std::string expectedValue){
+    if (expectedType == tokens[currToken]->getType() && expectedValue == tokens[currToken]->getValue()){
+        return true;
+    }
     return false;
 }
 
@@ -165,6 +182,11 @@ bool CompilerParser::have(std::string expectedType, std::string expectedValue){
  * @return the current token before advancing
  */
 Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValue){
+    if (expectedType == tokens[currToken]->getType() && expectedValue == tokens[currToken]->getValue()){
+        next();
+        return current();
+    }
+    throw ParseException();
     return NULL;
 }
 

@@ -1,6 +1,7 @@
 #ifndef COMPILERPARSER_H
 #define COMPILERPARSER_H
 
+#include <vector>
 #include <list>
 #include <exception>
 
@@ -8,6 +9,9 @@
 #include "Token.h"
 
 class CompilerParser {
+    private:
+        std::vector<Token*> tokens;
+        int currToken=0;
     public:
         CompilerParser(std::list<Token*> tokens);
 
