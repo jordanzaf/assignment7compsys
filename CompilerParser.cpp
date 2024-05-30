@@ -88,7 +88,7 @@ ParseTree* CompilerParser::compileClassVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutine() {
-    ParseTree* parent = new ParseTree("subroutine", "null");
+    /*ParseTree* parent = new ParseTree("subroutine", "null");
     if (currTokVal() != "constructor" && currTokVal() != "function" && currTokVal() != "method"){
         throw ParseException();
     }
@@ -111,6 +111,8 @@ ParseTree* CompilerParser::compileSubroutine() {
     addChild(parent);
     mustBe("symbol", "}");
     return parent;
+    */
+   return NULL;
 }
 
 /**
