@@ -19,12 +19,16 @@ CompilerParser::CompilerParser(std::list<Token*> tokens) {
 ParseTree* CompilerParser::compileProgram() {
     int parent = currToken;
     mustBe("keyword", "class");
-    //addChild(parent, currToken);
+    std::cout << currTokVal(); 
+    addChild(parent, currToken);
     mustBe("identifier", "Main");
-    //addChild(parent, currToken);
+    std::cout << currTokVal(); 
+    addChild(parent, currToken);
     mustBe("symbol", "{");
-    //addChild(parent, currToken);
+    std::cout << currTokVal(); 
+    addChild(parent, currToken);
     mustBe("symbol", "}");
+    std::cout << currTokVal(); 
     return tokens[parent];
 }
 
@@ -207,7 +211,9 @@ bool CompilerParser::have(std::string expectedType, std::string expectedValue){
  */
 Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValue){
     if (expectedType == tokens[currToken]->getType() && expectedValue == tokens[currToken]->getValue()){
-        next();
+        if (currToken != tokens.size()-1){
+            next();
+        }
         return current();
     }
     throw ParseException();
