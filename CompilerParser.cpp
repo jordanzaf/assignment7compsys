@@ -227,7 +227,6 @@ ParseTree* CompilerParser::compileLet() {
     mustBe("identifier", currTokVal());
     addChild(parent);
     mustBe("symbol", "=");
-    addChild(parent);
 
     addChild(parent, compileExpression());
     
@@ -247,7 +246,6 @@ ParseTree* CompilerParser::compileIf() {
     mustBe("keyword", "if");
     addChild(parent);
     mustBe("symbol", "(");
-    addChild(parent);
     addChild(parent, compileExpression());
     addChild(parent);
     mustBe("symbol", ")");
