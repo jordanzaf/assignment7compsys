@@ -124,7 +124,7 @@ ParseTree* CompilerParser::compileParameterList() {
     std::cout << "5" << std::endl;
     ParseTree* parent = new ParseTree("parameterList", "null");
     std::cout << "6" << std::endl;
-    //addChild(parent);
+    addChild(parent);
     while (currTokVal() != ")"){
         if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
             throw ParseException();
