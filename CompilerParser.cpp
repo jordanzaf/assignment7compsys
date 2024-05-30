@@ -202,9 +202,13 @@ ParseTree* CompilerParser::compileStatements() {
         addChild(parent);
         if (currTokVal() == "let"){
             addChild(parent, compileLet());
-        } if (currTokVal() == "do"){
+        } else if (currTokVal() == "do"){
             addChild(parent, compileDo());
-        } if (currTokVal() == "return"){
+        } else if (currTokVal() == "if"){
+            addChild(parent, compileWhile());
+        } else if (currTokVal() == "while"){
+            addChild(parent, compileDo());
+        } else if (currTokVal() == "return"){
             addChild(parent, compileReturn());
         } else {
             break;
