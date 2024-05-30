@@ -226,6 +226,14 @@ ParseTree* CompilerParser::compileLet() {
     mustBe("keyword", "let");
     addChild(parent);
     mustBe("identifier", currTokVal());
+    if (currTokVal() == "["){
+        addChild(parent);
+        mustBe("symbol", "[");
+        addChild(parent, compileExpression());
+        addChild(parent);
+        mustBe("symbol", "]");
+
+    }
     addChild(parent);
     mustBe("symbol", "=");
 
@@ -261,6 +269,7 @@ ParseTree* CompilerParser::compileIf() {
         addChild(parent);
         mustBe("symbol", "{");
         addChild(parent, compileStatements());
+        addChild(parent);
         mustBe("symbol", "}");
     } 
     return parent;
