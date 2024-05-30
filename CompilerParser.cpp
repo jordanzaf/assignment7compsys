@@ -151,13 +151,10 @@ ParseTree* CompilerParser::compileSubroutineBody() {
     addChild(parent);
     mustBe("symbol", "{");
     
-    while (currTokVal() != "}") {
-        if (currTokVal() == "var") {
-            addChild(parent, compileVarDec());
-        } else {
-            addChild(parent, compileStatements());
-        }
+    while (currTokVal() != "}" && currTokVal() == "var") {
+        addChild(parent, compileVarDec());
     }
+    addChild(parent, compileStatements());
     
     addChild(parent);
     mustBe("symbol", "}");
