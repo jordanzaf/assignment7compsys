@@ -198,15 +198,17 @@ ParseTree* CompilerParser::compileVarDec() {
  */
 ParseTree* CompilerParser::compileStatements() {
     ParseTree* parent = new ParseTree("statements", "null");
-    addChild(parent);
-    if (currTokVal() == "let"){
-        addChild(parent, compileLet());
-    } if (currTokVal() == "do"){
-        addChild(parent, compileDo());
-    } if (currTokVal() == "return"){
-        addChild(parent, compileReturn());
-    } else {
-        throw ParseException();
+    while (currTokVal() != "}"){
+        addChild(parent);
+        if (currTokVal() == "let"){
+            addChild(parent, compileLet());
+        } if (currTokVal() == "do"){
+            addChild(parent, compileDo());
+        } if (currTokVal() == "return"){
+            addChild(parent, compileReturn());
+        } else {
+            throw ParseException();
+        }
     }
 
     return parent;
