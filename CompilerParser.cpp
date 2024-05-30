@@ -24,11 +24,13 @@ ParseTree* CompilerParser::compileProgram() {
     mustBe("identifier", "Main"); 
     addChild(parent);
     mustBe("symbol", "{");
-    try {
+    if (currTokVal() == "field" || currTokVal() == "static"){
         addChild(parent, compileClassVarDec());
-    } catch (ParseException()){
-
     }
+    if (currTokVal() == "constructor" || currTokVal() == "function" || currTokVal() == "method"){
+        addChild(parent, compileSubroutine());
+    }
+
     addChild(parent);
     mustBe("symbol", "}");
     return parent;
@@ -46,10 +48,11 @@ ParseTree* CompilerParser::compileClass() {
     mustBe("identifier", currTokVal());
     addChild(parent);
     mustBe("symbol", "{");
-    try {
+    if (currTokVal() == "field" || currTokVal() == "static"){
         addChild(parent, compileClassVarDec());
-    } catch (ParseException()){
-
+    }
+    if (currTokVal() == "constructor" || currTokVal() == "function" || currTokVal() == "method"){
+        addChild(parent, compileSubroutine());
     }
     addChild(parent);
     mustBe("symbol", "}");
@@ -86,29 +89,25 @@ ParseTree* CompilerParser::compileClassVarDec() {
  */
 ParseTree* CompilerParser::compileSubroutine() {
     ParseTree* parent = new ParseTree("subroutine", "null");
-    if (currTokTyp() != "constructor" && currTokTyp() != "function" && currTokTyp() != "method" && currTokTyp() != "void"){
+    if (currTokVal() != "constructor" && currTokVal() != "function" && currTokVal() != "method"){
         throw ParseException();
     }
+    mustBe("keyword", currTokVal());
     addChild(parent);
-    mustBe("keyword", currTokTyp());
+    if (currTokVal() != "void" && currTokVal() != "int" && currTokVal() != "char" && currTokVal() != "boolean" ){
+        throw ParseException();
+    }
+    mustBe("keyword", currTokVal());
     addChild(parent);
     mustBe("identifier", currTokVal());
     addChild(parent);
     mustBe("symbol", "(");
-    try {
-        addChild(parent, compileParameterList());
-    } catch (ParseException()){
-
-    }
+    addChild(parent, compileParameterList());
     addChild(parent);
     mustBe("symbol", ")");
     addChild(parent);
     mustBe("symbol", "{");
-    try {
-        addChild(parent, compileSubroutineBody());
-    } catch (ParseException()){
-
-    }
+    addChild(parent, compileSubroutineBody());
     addChild(parent);
     mustBe("symbol", "}");
     return parent;
