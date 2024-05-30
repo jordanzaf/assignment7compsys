@@ -37,6 +37,7 @@ class CompilerParser {
         void addChild(ParseTree* a);
         void addChild(ParseTree* a, ParseTree* b);
         std::string currTokVal();
+        std::string currTokTyp();
         
         void next();
         Token* current();

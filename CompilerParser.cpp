@@ -85,12 +85,33 @@ ParseTree* CompilerParser::compileClassVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutine() {
-    int parent = currToken;
-    if (currTokVal()!="constructor" && currTokVal()!="function" ){
+    ParseTree* parent = new ParseTree("subroutine", "null");
+    if (currTokTyp() != "constructor" && currTokTyp() != "function" && currTokTyp() != "method" && currTokTyp() != "void"){
+        throw ParseException();
+    }
+    addChild(parent);
+    mustBe("keyword", currTokTyp());
+    addChild(parent);
+    mustBe("identifier", currTokVal());
+    addChild(parent);
+    mustBe("symbol", "(");
+    try {
+        addChild(parent, compileParameterList());
+    } catch (ParseException()){
 
     }
+    addChild(parent);
+    mustBe("symbol", ")");
+    addChild(parent);
+    mustBe("symbol", "{");
+    try {
+        addChild(parent, compileSubroutineBody());
+    } catch (ParseException()){
 
-    return tokens[parent];
+    }
+    addChild(parent);
+    mustBe("symbol", "}");
+    return parent;
 }
 
 /**
@@ -98,7 +119,25 @@ ParseTree* CompilerParser::compileSubroutine() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileParameterList() {
-    return NULL;
+    ParseTree* parent = new ParseTree("parameterList", "null");
+    if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
+        throw ParseException();
+    }
+    addChild(parent);
+    while (currTokVal() != ")"){
+        addChild(parent);
+        mustBe("keyword", currTokVal());
+        addChild(parent);
+        mustBe("identifier", currTokVal());
+        if (currTokVal()!=")" ){
+            addChild(parent);
+            mustBe("symbol", ",");
+        }else {
+            throw ParseException();
+        }
+    }
+
+    return parent;
 }
 
 /**
@@ -106,6 +145,23 @@ ParseTree* CompilerParser::compileParameterList() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutineBody() {
+    ParseTree* parent = new ParseTree("subroutineBody", "null");
+    addChild(parent);
+    mustBe("symbol", "{");
+    try {
+        addChild(parent, compileVarDec());
+    } catch (ParseException()){
+
+    }
+
+    try {
+        addChild(parent, compileStatements());
+    } catch (ParseException()){
+
+    }
+
+    addChild(parent);
+    mustBe("symbol", "}");
     return NULL;
 }
 
@@ -114,7 +170,26 @@ ParseTree* CompilerParser::compileSubroutineBody() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileVarDec() {
-    return NULL;
+    ParseTree* parent = new ParseTree("varDec", "null");
+    addChild(parent);
+    while (currTokVal() != "}"){
+        addChild(parent);
+        mustBe("keyword", "var");
+        if (currTokTyp() != "char" && currTokTyp() != "int" && currTokTyp() != "boolean"){
+            throw ParseException();
+        }
+        addChild(parent);
+        mustBe("keyword", currTokTyp());
+        addChild(parent);
+        mustBe("identifier", currTokVal());
+        if (currTokVal()!=";" ){
+            addChild(parent);
+            mustBe("symbol", ",");
+        }else {
+            throw ParseException();
+        }
+    }
+    return parent;
 }
 
 /**
@@ -251,4 +326,8 @@ void CompilerParser::addChild(ParseTree* a, ParseTree* b){
 
 std::string CompilerParser::currTokVal(){
     return (tokens[currToken]->getValue());
+}
+
+std::string CompilerParser::currTokTyp(){
+    return (tokens[currToken]->getType());
 }
