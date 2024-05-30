@@ -228,12 +228,9 @@ ParseTree* CompilerParser::compileLet() {
     addChild(parent);
     mustBe("symbol", "=");
     addChild(parent);
-    if (currTokVal() == "skip" ){
-        mustBe("keyword", "skip");
-    }else {
-        mustBe("integerConstant", currTokVal());
-    }
 
+    addChild(parent, compileExpression());
+    
     addChild(parent);
     mustBe("symbol", ";");
 
@@ -251,7 +248,7 @@ ParseTree* CompilerParser::compileIf() {
     addChild(parent);
     mustBe("symbol", "(");
     addChild(parent);
-    mustBe("keyword", "skip");
+    addChild(parent, compileExpression());
     addChild(parent);
     mustBe("symbol", ")");
     addChild(parent);
@@ -300,7 +297,9 @@ ParseTree* CompilerParser::compileReturn() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileExpression() {
-    return NULL;
+    ParseTree* parent = new ParseTree("expression", "null");
+    addChild(parent, compileExpression());
+    return parent;
 }
 
 /**
