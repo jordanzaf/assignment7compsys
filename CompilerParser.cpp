@@ -218,9 +218,13 @@ ParseTree* CompilerParser::compileStatements() {
  */
 ParseTree* CompilerParser::compileLet() {
     ParseTree* parent = new ParseTree("letStatement", "null");
+    addChild(parent);
     mustBe("keyword", "let");
+    addChild(parent);
     mustBe("identifier", currTokVal());
+    addChild(parent);
     mustBe("symbol", "=");
+    addChild(parent);
     mustBe("keyword", "skip");
 
     return parent;
