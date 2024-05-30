@@ -121,26 +121,24 @@ ParseTree* CompilerParser::compileSubroutine() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileParameterList() {
-    std::cout << "5" << std::endl;
     ParseTree* parent = new ParseTree("parameterList", "null");
-    std::cout << "6" << std::endl;
     addChild(parent);
     while (currTokVal() != ")"){
         if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
-            throw ParseException();
+            mustBe("identifier", currTokVal());
+        }else {
+            mustBe("keyword", currTokVal());
         }
         addChild(parent);
-        mustBe("keyword", currTokVal());
-        addChild(parent);
         mustBe("identifier", currTokVal());
-        std::cout << "x" << std::endl;
+        if (currToken >= tokens.size()){
+            break;
+        }
         if (currTokVal()!=")" ){
             addChild(parent);
-            std::cout << "7" << std::endl;
             mustBe("symbol", ",");
         }
     }
-    std::cout << "9" << std::endl;
     return parent;
 }
 
@@ -224,6 +222,9 @@ ParseTree* CompilerParser::compileLet() {
     ParseTree* parent = new ParseTree("letStatement", "null");
     mustBe("keyword", "let");
     mustBe("identifier", currTokVal());
+    mustBe("symbol", "=");
+    mustBe("keyword", "skip");
+
     return parent;
 }
 
