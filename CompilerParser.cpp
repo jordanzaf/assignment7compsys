@@ -260,7 +260,9 @@ ParseTree* CompilerParser::compileIf() {
     mustBe("symbol", ")");
     addChild(parent);
     mustBe("symbol", "{");
-    addChild(parent, compileStatements());
+    if (currTokVal() != "}"){
+        addChild(parent, compileStatements());
+    }
     addChild(parent);
     mustBe("symbol", "}");
     if (currToken < tokens.size() -1 && currTokVal() == "else"){
@@ -290,7 +292,9 @@ ParseTree* CompilerParser::compileWhile() {
     mustBe("symbol", ")");
     addChild(parent);
     mustBe("symbol", "{");
-    addChild(parent, compileStatements());
+    if (currTokVal() != "}"){
+        addChild(parent, compileStatements());
+    }
     addChild(parent);
     mustBe("symbol", "}");
     return parent;
