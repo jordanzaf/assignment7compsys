@@ -17,6 +17,9 @@ CompilerParser::CompilerParser(std::list<Token*> tokens) {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileProgram() {
+    if (tokens.size() <4){
+        throw ParseException();
+    }
     mustBe("keyword", "class");
     tokens[0]->addChild(tokens[1]);
     std::cout <<(tokens[0])<<std::endl;
@@ -35,9 +38,7 @@ ParseTree* CompilerParser::compileProgram() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClass() {
-    //ParseTree* output;
-    //mustBe("keyword", "class");
-   // mustBe("identifier", "");
+
     return NULL;
 }
 
@@ -186,7 +187,7 @@ Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValu
         next();
         return current();
     }
-    throw ParseException();
+    throw ParseError();
     return NULL;
 }
 
