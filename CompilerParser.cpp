@@ -23,6 +23,11 @@ ParseTree* CompilerParser::compileProgram() {
     mustBe("identifier", "Main"); 
     addChild(parent);
     mustBe("symbol", "{");
+    try {
+        addChild(parent, compileClassVarDec());
+    } catch (ParseException()){
+
+    }
     addChild(parent);
     mustBe("symbol", "}");
     return parent;
