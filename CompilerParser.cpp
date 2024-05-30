@@ -298,7 +298,8 @@ ParseTree* CompilerParser::compileReturn() {
  */
 ParseTree* CompilerParser::compileExpression() {
     ParseTree* parent = new ParseTree("expression", "null");
-    addChild(parent, compileExpression());
+    addChild(parent);
+    mustBe("keyword", "skip");
     return parent;
 }
 
