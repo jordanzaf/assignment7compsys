@@ -90,10 +90,10 @@ ParseTree* CompilerParser::compileClassVarDec() {
  */
 ParseTree* CompilerParser::compileSubroutine() {
     std::cout << "3" << std::endl;
-    ParseTree* parent = new ParseTree("subroutine", "null");
     if (currTokVal() != "constructor" && currTokVal() != "function" && currTokVal() != "method"){
         throw ParseException();
     }
+    ParseTree* parent = new ParseTree("subroutine", "null");
     mustBe("keyword", currTokVal());
     addChild(parent);
     if (currTokVal() != "void" && currTokVal() != "int" && currTokVal() != "char" && currTokVal() != "boolean" ){
@@ -114,8 +114,6 @@ ParseTree* CompilerParser::compileSubroutine() {
     addChild(parent, compileSubroutineBody());
     std::cout << "2.2" << std::endl;
     return parent;
-
-   return NULL;
 }
 
 /**
@@ -125,12 +123,12 @@ ParseTree* CompilerParser::compileSubroutine() {
 ParseTree* CompilerParser::compileParameterList() {
     std::cout << "5" << std::endl;
     ParseTree* parent = new ParseTree("parameterList", "null");
-    if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
-        throw ParseException();
-    }
     std::cout << "6" << std::endl;
-    addChild(parent);
+    //addChild(parent);
     while (currTokVal() != ")"){
+        if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
+            throw ParseException();
+        }
         addChild(parent);
         mustBe("keyword", currTokVal());
         addChild(parent);
