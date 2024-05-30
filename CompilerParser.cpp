@@ -213,6 +213,7 @@ ParseTree* CompilerParser::compileStatements() {
     }
 
     return parent;
+
 }
 
 /**
@@ -220,7 +221,7 @@ ParseTree* CompilerParser::compileStatements() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileLet() {
-  /* ParseTree* parent = new ParseTree("letStatement", "null");
+    ParseTree* parent = new ParseTree("letStatement", "null");
     addChild(parent);
     mustBe("keyword", "let");
     addChild(parent);
@@ -233,8 +234,7 @@ ParseTree* CompilerParser::compileLet() {
     addChild(parent);
     mustBe("symbol", ";");
 
-    return parent;*/
-    return NULL;
+    return parent;
 }
 
 /**
@@ -242,7 +242,6 @@ ParseTree* CompilerParser::compileLet() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileIf() {
-    /*
     ParseTree* parent = new ParseTree("ifStatement", "null");
     addChild(parent);
     mustBe("keyword", "if");
@@ -265,8 +264,6 @@ ParseTree* CompilerParser::compileIf() {
         mustBe("symbol", "}");
     } 
     return parent;
-    */
-   return NULL;
 }
 
 /**
@@ -275,6 +272,18 @@ ParseTree* CompilerParser::compileIf() {
  */
 ParseTree* CompilerParser::compileWhile() {
     ParseTree* parent = new ParseTree("whileStatement", "null");
+    addChild(parent);
+    mustBe("keyword", "while");
+    addChild(parent);
+    mustBe("symbol", "(");
+    addChild(parent, compileExpression());
+    addChild(parent);
+    mustBe("symbol", ")");
+    addChild(parent);
+    mustBe("symbol", "{");
+    addChild(parent, compileStatements());
+    addChild(parent);
+    mustBe("symbol", "}");
     return parent;
 }
 
@@ -284,6 +293,10 @@ ParseTree* CompilerParser::compileWhile() {
  */
 ParseTree* CompilerParser::compileDo() {
     ParseTree* parent = new ParseTree("doStatement", "null");
+    addChild(parent);
+    mustBe("keyword", "do");
+    addChild(parent, compileExpression());
+    mustBe("symbol", ";");
     return parent;
 }
 
@@ -293,6 +306,13 @@ ParseTree* CompilerParser::compileDo() {
  */
 ParseTree* CompilerParser::compileReturn() {
     ParseTree* parent = new ParseTree("returnStatement", "null");
+    addChild(parent);
+    mustBe("keyword", "return");
+    if (currTokVal() != ";"){
+        addChild(parent, compileExpression());
+    }
+    addChild(parent);
+    mustBe("symbol", ";");
     return parent;
 }
 
