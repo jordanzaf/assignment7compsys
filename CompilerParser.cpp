@@ -50,13 +50,17 @@ ParseTree* CompilerParser::compileClassVarDec() {
         throw ParseException();
     } 
     mustBe("keyword", tokens[currToken]->getValue());
+    addChild(parent, currToken);
     if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
         throw ParseException();
     } 
     mustBe("keyword", tokens[1]->getValue());
+    addChild(parent, currToken);
     mustBe("identifier", tokens[currToken]->getValue());
+    addChild(parent, currToken);
     while (currTokVal() != ";"){
         mustBe(tokens[currToken]->getType(), currTokVal());
+        addChild(parent, currToken);
     }
     mustBe("symbol", ";");
     return tokens[parent];
