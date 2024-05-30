@@ -19,11 +19,11 @@ CompilerParser::CompilerParser(std::list<Token*> tokens) {
 ParseTree* CompilerParser::compileProgram() {
     int parent = currToken;
     mustBe("keyword", "class");
-    addChild(parent, currToken);
+    //addChild(parent, currToken);
     mustBe("identifier", "Main");
-    addChild(parent, currToken);
+    //addChild(parent, currToken);
     mustBe("symbol", "{");
-    addChild(parent, currToken);
+    //addChild(parent, currToken);
     mustBe("symbol", "}");
     return tokens[parent];
 }
@@ -35,11 +35,11 @@ ParseTree* CompilerParser::compileProgram() {
 ParseTree* CompilerParser::compileClass() {
     int parent = currToken;
     mustBe("keyword", "class");
-    addChild(parent, currToken);
+    //addChild(parent, currToken);
     mustBe("identifier", tokens[1]->getValue());
-    addChild(parent, currToken);
+    //addChild(parent, currToken);
     mustBe("symbol", "{");
-    addChild(parent, currToken);
+    //addChild(parent, currToken);
     mustBe("symbol", "}");
     return tokens[parent];
 }
