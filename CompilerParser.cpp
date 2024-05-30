@@ -184,12 +184,12 @@ ParseTree* CompilerParser::compileVarDec() {
     mustBe("keyword", currTokVal());
 
     while (currTokVal() != ";"){
-        addChild(parent);
-        mustBe("identifier", currTokVal());
         if (currTokVal()!=";" ){
             addChild(parent);
             mustBe("symbol", ",");
         }
+        addChild(parent);
+        mustBe("identifier", currTokVal());
     }
     addChild(parent);
     mustBe("symbol", ";");
