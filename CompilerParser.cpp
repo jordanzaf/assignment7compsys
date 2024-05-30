@@ -147,7 +147,6 @@ ParseTree* CompilerParser::compileParameterList() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutineBody() {
-    /*
     ParseTree* parent = new ParseTree("subroutineBody", "null");
     addChild(parent);
     mustBe("symbol", "{");
@@ -160,8 +159,7 @@ ParseTree* CompilerParser::compileSubroutineBody() {
     addChild(parent);
     mustBe("symbol", "}");
      return parent;
-     */
-    return NULL;
+
 }
 
 /**
