@@ -18,6 +18,7 @@ CompilerParser::CompilerParser(std::list<Token*> tokens) {
  */
 ParseTree* CompilerParser::compileProgram() {
     ParseTree* parent = new ParseTree("class", "null");
+    addChild(parent);
     mustBe("keyword", "class");
     addChild(parent);
     mustBe("identifier", "Main"); 
@@ -39,9 +40,10 @@ ParseTree* CompilerParser::compileProgram() {
  */
 ParseTree* CompilerParser::compileClass() {
     ParseTree* parent = new ParseTree("class", "null");
+    addChild(parent);
     mustBe("keyword", "class");
     addChild(parent);
-    mustBe("identifier", tokens[1]->getValue());
+    mustBe("identifier", currTokVal());
     addChild(parent);
     mustBe("symbol", "{");
     try {
@@ -59,12 +61,13 @@ ParseTree* CompilerParser::compileClassVarDec() {
     if (currTokVal()!="field" && currTokVal()!="static"){
         throw ParseException();
     } 
+    addChild(parent);
     mustBe("keyword", tokens[currToken]->getValue());
     addChild(parent);
     if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
         throw ParseException();
     } 
-    mustBe("keyword", tokens[1]->getValue());
+    mustBe("keyword", currTokVal());
     addChild(parent);
     mustBe("identifier", tokens[currToken]->getValue());
     addChild(parent);
