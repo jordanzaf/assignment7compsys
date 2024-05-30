@@ -34,7 +34,8 @@ class CompilerParser {
         ParseTree* compileTerm();
         ParseTree* compileExpressionList();
 
-        void addChild(int a, int b);
+        void addChild(ParseTree* a);
+        void addChild(ParseTree* a, ParseTree* b);
         std::string currTokVal();
         
         void next();

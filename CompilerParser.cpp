@@ -17,19 +17,15 @@ CompilerParser::CompilerParser(std::list<Token*> tokens) {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileProgram() {
-    int parent = currToken;
+    ParseTree* parent = new ParseTree("class", "null");
     mustBe("keyword", "class");
-    std::cout << currTokVal(); 
-    addChild(parent, currToken);
-    mustBe("identifier", "Main");
-    std::cout << currTokVal(); 
-    addChild(parent, currToken);
+    addChild(parent);
+    mustBe("identifier", "Main"); 
+    addChild(parent);
     mustBe("symbol", "{");
-    std::cout << currTokVal(); 
-    addChild(parent, currToken);
+    addChild(parent);
     mustBe("symbol", "}");
-    std::cout << currTokVal(); 
-    return tokens[parent];
+    return parent;
 }
 
 /**
@@ -37,38 +33,43 @@ ParseTree* CompilerParser::compileProgram() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClass() {
-    int parent = currToken;
+    ParseTree* parent = new ParseTree("class", "null");
     mustBe("keyword", "class");
-    //addChild(parent, currToken);
+    addChild(parent);
     mustBe("identifier", tokens[1]->getValue());
-    //addChild(parent, currToken);
+    addChild(parent);
     mustBe("symbol", "{");
-    //addChild(parent, currToken);
+    try {
+        addChild(parent, compileClassVarDec());
+    } catch (ParseException()){
+
+    }
+    addChild(parent);
     mustBe("symbol", "}");
-    return tokens[parent];
+    return parent;
 }
 
 ParseTree* CompilerParser::compileClassVarDec() {
-    int parent = currToken;
+    ParseTree* parent = new ParseTree("classVarDec", "null");
     if (currTokVal()!="field" && currTokVal()!="static"){
         throw ParseException();
     } 
     mustBe("keyword", tokens[currToken]->getValue());
-    addChild(parent, currToken);
+    addChild(parent);
     if (currTokVal()!="int" && currTokVal()!="boolean" && currTokVal()!="char"){
         throw ParseException();
     } 
     mustBe("keyword", tokens[1]->getValue());
-    addChild(parent, currToken);
+    addChild(parent);
     mustBe("identifier", tokens[currToken]->getValue());
-    addChild(parent, currToken);
+    addChild(parent);
     //do this later
     while (currTokVal() != ";"){
         mustBe(tokens[currToken]->getType(), currTokVal());
-        addChild(parent, currToken);
+        addChild(parent);
     }
     mustBe("symbol", ";");
-    return tokens[parent];
+    return parent;
 }
 
 /**
@@ -77,6 +78,9 @@ ParseTree* CompilerParser::compileClassVarDec() {
  */
 ParseTree* CompilerParser::compileSubroutine() {
     int parent = currToken;
+    if (currTokVal()!="constructor" && currTokVal()!="function" ){
+
+    }
 
     return tokens[parent];
 }
@@ -181,7 +185,7 @@ ParseTree* CompilerParser::compileExpressionList() {
  * Advance to the next token
  */
 void CompilerParser::next(){
-    if (currToken >= tokens.size()-1){
+    if (currToken >= tokens.size()){
         throw ParseException();
     }
     currToken++;
@@ -229,8 +233,12 @@ const char* ParseException::what() {
     return "An Exception occurred while parsing!";
 }
 
-void CompilerParser::addChild(int a, int b){
-    tokens[a]->ParseTree::addChild(tokens[b]);
+void CompilerParser::addChild(ParseTree* a){
+    a->addChild(tokens[currToken]);
+}
+
+void CompilerParser::addChild(ParseTree* a, ParseTree* b){
+    a->addChild(b);
 }
 
 std::string CompilerParser::currTokVal(){
