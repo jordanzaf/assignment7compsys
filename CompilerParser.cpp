@@ -255,17 +255,13 @@ ParseTree* CompilerParser::compileIf() {
     mustBe("symbol", ")");
     addChild(parent);
     mustBe("symbol", "{");
-    if (currTokVal() != "}"){
-        addChild(parent, compileStatements());
-    }
+    addChild(parent, compileStatements());
     addChild(parent);
     mustBe("symbol", "}");
     if (currTokVal() == "else"){
         mustBe("keyword", "else");
         mustBe("symbol", "{");
-        if (currTokVal() != "}"){
-            addChild(parent, compileStatements());
-        }
+        addChild(parent, compileStatements());
         mustBe("symbol", "}");
     } 
     return parent;
