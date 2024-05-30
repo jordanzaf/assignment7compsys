@@ -195,7 +195,7 @@ ParseTree* CompilerParser::compileVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileStatements() {
-    /*ParseTree* parent = new ParseTree("statements", "null");
+    ParseTree* parent = new ParseTree("statements", "null");
     while (currToken < tokens.size()){
         if (currTokVal() == "let"){
             addChild(parent, compileLet());
@@ -213,8 +213,6 @@ ParseTree* CompilerParser::compileStatements() {
     }
 
     return parent;
-    */
-   return NULL;
 }
 
 /**
@@ -222,7 +220,7 @@ ParseTree* CompilerParser::compileStatements() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileLet() {
-    ParseTree* parent = new ParseTree("letStatement", "null");
+  /* ParseTree* parent = new ParseTree("letStatement", "null");
     addChild(parent);
     mustBe("keyword", "let");
     addChild(parent);
@@ -235,7 +233,8 @@ ParseTree* CompilerParser::compileLet() {
     addChild(parent);
     mustBe("symbol", ";");
 
-    return parent;
+    return parent;*/
+    return NULL;
 }
 
 /**
@@ -243,6 +242,7 @@ ParseTree* CompilerParser::compileLet() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileIf() {
+    /*
     ParseTree* parent = new ParseTree("ifStatement", "null");
     addChild(parent);
     mustBe("keyword", "if");
@@ -265,6 +265,8 @@ ParseTree* CompilerParser::compileIf() {
         mustBe("symbol", "}");
     } 
     return parent;
+    */
+   return NULL;
 }
 
 /**
